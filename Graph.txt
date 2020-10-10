@@ -1,0 +1,53 @@
+ -----------------------------------------------------------
+
+    public static void solve() {
+        int n = sc.ni();
+        adj = new ArrayList<>(n + 1);
+        vis = new boolean[n + 1];
+        for (int i = 0; i <= n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < m; i++) {
+            int u = sc.ni();
+            int v = sc.ni();
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+        
+        w.println(adj);
+        dfs(2);  //source two
+        w.println();
+        bfs(2);  //source two
+    }
+
+
+    static boolean vis[];
+    static ArrayList<ArrayList<Integer>> adj;
+
+    static void dfs(int v) {
+        vis[v] = true;
+        w.print(v+" ");
+        for(int child: adj.get(v)) {
+            if(!vis[child]) 
+                dfs(child);
+        }
+    } 
+
+    static void bfs(int v) {
+        vis= new boolean[n];
+        Queue<Integer> q = new LinkedList<>();
+        vis[v] = true;
+        q.add(v);
+        while (q.size()!=0) {
+            int n = q.remove();
+            w.print(n+" ");
+            for(int child: adj.get(n)) {
+                if(!vis[child]) {
+                    vis[child] = true;
+                    q.add(child);
+                }
+            }
+        }
+    }
+-----------------------------------------------------------------------------    

@@ -1,0 +1,24 @@
+
+
+
+    static int n = (int)90e6;
+    static boolean arr[] = new boolean[n];
+    static ArrayList<Integer> prime = new ArrayList<>();
+    
+static void sieve() {
+        arr[0] = arr[1] = true;
+        for(int i=2; i*i<n; i++) {
+            if(arr[i] == false) {
+                for(int j=i*i; j<n; j+=i) {
+                    arr[j] = true;
+                }
+            }
+        }
+        for(int i=2; i<n; i++) {
+            if(arr[i]==false) prime.add(i);
+        }
+    }
+    static void solve() {
+        int n = sc.nextInt();
+        w.println(prime.get(n-1));
+    }
