@@ -1,6 +1,4 @@
 
-
-
     static int n = (int)90e6;
     static boolean arr[] = new boolean[n];
     static ArrayList<Integer> prime = new ArrayList<>();
