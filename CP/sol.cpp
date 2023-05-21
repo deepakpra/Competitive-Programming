@@ -1,0 +1,156 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// #include <ext/pb_ds/assoc_container.hpp>
+// #include <ext/pb_ds/tree_policy.hpp>
+// using namespace __gnu_pbds;
+// template <typename T>
+// using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+typedef unsigned long long ull;
+#define pi 3.14159265358979323846264338327950
+#define ll long long
+#define ld long double
+#define deepak2001 ios::sync_with_stdio(false), cin.tie(0);
+#define all(x) (x).begin(), (x).end()
+#define rall(x) (x).rbegin(), (x).rend()
+#define sz(x) (int)((x).size())
+#define ff first
+#define ss second
+#define pb push_back
+#define pyes cout << "YES\n"
+#define pmi cout << "-1\n"
+#define pno cout << "NO\n"
+#define mem1(a) memset(a, -1, sizeof(a))
+#define mem0(a) memset(a, 0, sizeof(a))
+#define rep(i, n) for (ll i = 0; i < n; i++)
+#define rrep(i, n) for (ll i = n; i >= 0; i--)
+// #define int long long
+
+//**********************Debug template*****************************//
+#ifndef ONLINE_JUDGE
+#define what(...) cerr << "[" << #__VA_ARGS__ << "]:", dbg_out(__VA_ARGS__)
+#else
+#define what(...)
+#endif
+template <typename A, typename B>
+string to_string(pair<A, B> p);
+string to_string(const string &s) { return '"' + s + '"'; }
+string to_string(const char s) { return (string) "'" + s + "'"; }
+string to_string(const char *s) { return to_string((string)s); }
+string to_string(bool b) { return (b ? "true" : "false"); }
+template <size_t N>
+string to_string(const bitset<N> &v) { return v.to_string(); }
+template <typename A>
+string to_string(const A &v)
+{
+    bool first = true;
+    string res = "{";
+    for (const auto &x : v)
+    {
+        if (!first)
+            res += ",";
+        first = false;
+        res += to_string(x);
+    }
+    res += "}";
+    return res;
+}
+template <typename A, typename B>
+string to_string(pair<A, B> p)
+{
+    return "(" + to_string(p.first) + "," + to_string(p.second) + ")";
+}
+void dbg_out() { cerr << endl; }
+template <typename Head, typename... Tail>
+void dbg_out(Head H, Tail... T)
+{
+    cerr << "  " << to_string(H);
+    dbg_out(T...);
+}
+//**********************Debug template end************************//
+// Operator overloads
+template <typename T1, typename T2>
+istream &operator>>(istream &istream, pair<T1, T2> &p)
+{
+    return (istream >> p.first >> p.second);
+}
+template <typename T>
+istream &operator>>(istream &istream, vector<T> &v)
+{
+    for (auto &it : v)
+        cin >> it;
+    return istream;
+}
+template <typename T1, typename T2>
+ostream &operator<<(ostream &ostream, const pair<T1, T2> &p)
+{
+    return (ostream << p.first << " " << p.second << "\n");
+}
+template <typename T>
+ostream &operator<<(ostream &ostream, const vector<T> &c)
+{
+    for (auto &it : c)
+        cout << it << " ";
+    return ostream;
+}
+//*****************************************************************//
+
+const ll mod = 1e9 + 7;
+ll modMul(ll a, ll b) { return ((((a % mod) * (b % mod)) % mod) + mod) % mod; }
+ll modSub(ll a, ll b) { return ((((a % mod) - (b % mod)) % mod) + mod) % mod; }
+ll modAdd(ll a, ll b) { return ((((a % mod) + (b % mod)) % mod) + mod) % mod; }
+
+vector<int> dx = {1, 0, -1, 0, 1, 1, -1, -1};
+vector<int> dy = {0, 1, 0, -1, -1, 1, 1, -1};
+
+////Deepak Prajapati--------->
+
+const ll mxN = 2e5 + 10;
+const ld eps = 1e-6;
+const ll inf = 1e18;
+//************************************************************************//
+ll expomod(ll n, ll pow, ll m = mod)
+{
+    n %= m;
+    ll res = 1;
+    while (pow > 0)
+    {
+        if (pow & 1)
+            res = res * n % m;
+        n = n * n % m;
+        pow >>= 1;
+    }
+    return res;
+}
+//*********************************SOLUTION********************************//
+// -->> check constraint, special case 1,
+//-->> -------------->, Brute?
+
+// vector<vector<int>> g;
+// vector<bool> vis;
+// vector<int> dp;
+
+void solve(int tc)
+{
+    ll n, q;
+}
+
+signed main()
+{
+    deepak2001;
+    cout << setprecision(7) << fixed;
+    int tc = 1;
+    // pre();
+    // sieve();
+    cin >> tc;
+    for (int i = 1; i <= tc; i++)
+    {
+        // cout << "Case #" << i << ": ";
+        solve(i);
+    }
+    // #ifndef ONLINE_JUDGE
+    //     cerr << "Time: " << 1000 * ((double)clock()) / (double)CLOCKS_PER_SEC << " ms\n";
+    // #endif
+    return 0;
+}

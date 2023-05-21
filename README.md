@@ -1,2 +1,1 @@
-# Competitive-Programming
-Some helpfull function for competitive programming in JAVA
+## My CP Competitive Programming template

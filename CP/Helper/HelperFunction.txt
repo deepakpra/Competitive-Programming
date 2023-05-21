@@ -1,0 +1,1009 @@
+---------------------------------------------------------
+Graph:
+
+vector<vector<int>> g;
+vector<bool> vis;
+
+vector<pair<int, int>> moves = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+vector<pair<int, int>> moves = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, 
+{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+
+vector<int> di = {1, 0, -1, 0, 1, 1, -1, -1};
+vector<int> dj = {0, 1, 0, -1, -1, 1, 1, -1};
+
+bool isValid(int x, int y)
+{
+    if (x < 0 || x >= n || y < 0 || y >= m)
+        return false;
+    if (vis[x][y])
+        return false;
+    return true;
+}
+void dfs(int i, int j)
+{
+    vis[i][j] = true;
+    for (auto m : moves)
+    {
+        if (isValid(m.first + i, m.second + j))
+            dfs(m.first + i, m.second + j);
+    }
+}
+
+void dfs(int i, int j)
+{
+    vis[i][j] = true;
+    for (int k = 0; k < 4; k++)
+    {
+        if (isValid(dx[k] + i, dy[k] + j))
+        {
+            dfs(dx[k] + i, dy[k] + j);
+        }
+    }
+}
+------------------------------------------------
+
+void dfs(int s)
+{
+    vis[s] = true;
+    for (auto child : g[s])
+    {
+        if (!vis[child])
+            dfs(child);
+    }
+}
+ 
+int main()
+{
+    int n,m;
+    cin >> n >> m;
+    g.assign(n, vector<int>());
+    vis.assign(n, false);
+ 
+    for (int i = 0; i < m; i++)
+    {
+        cin >> u >> v;
+        u--, v--;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+}
+
+------------------------------------------------
+BFS:
+
+queue<int> q;
+vector<bool> vis(n);
+
+q.push(s);
+vis[s] = true;
+while (!q.empty()) {
+    int v = q.front();
+    q.pop();
+    for (int u : adj[v]) {
+        if (!vis[u]) {
+            vis[u] = true;
+            q.push(u);
+        }
+    
+--------------------------------------------------------------------
+Toposort using BFS (Kahn's Algo):
+
+/// for lexicographically smallest/Largest use set.
+
+
+ vector<int> indegree(n);
+    queue<int> q;
+    for (int i = 0; i < m; i++)
+    {
+        int u, v;
+        cin >> u >> v;
+        v--, u--;
+        g[u].push_back(v);
+        indegree[v]++;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        if (indegree[i] == 0)
+        {
+            q.push(i);
+        }
+    }
+    vector<int> topo;
+    while (!q.empty())
+    {
+        int curr = q.front();
+        q.pop();
+        topo.push_back(curr);
+        for (int next : g[curr])
+        {
+            indegree[next]--;
+            if (indegree[next] == 0)
+            {
+                q.push(next);
+            }
+        }
+    }
+
+    // if there isn't a valid topological sorting (cycle)
+    if (topo.size() != n)
+    {
+        cout << "-1\n";
+        return;
+    }
+
+--------------------------------------------------------------------
+0-1 BFS:
+
+ deque<int> q;
+    vector<int> dis(n, 1e9 + 10);
+    dis[0] = 0;
+    q.push_back(0);
+    while (sz(q))
+    {
+        int curNode = q.front();
+        q.pop_front();
+
+        for (auto &&i : g[curNode])
+        {
+            if (dis[i.first] > i.second + dis[curNode])
+            {
+                dis[i.first] = i.second + dis[curNode];
+                if (i.second == 0)
+                    q.push_front(i.first);
+                else
+                    q.push_back(i.first);
+            }
+        }
+    }
+    if (dis[n - 1] == 1e9 + 10)
+        dis[n - 1] = -1;
+
+---------------------------------------------------------------------
+Sieve:
+
+vector<bool> isPrime(mxN + 1, true);
+void sieve()
+{
+    isPrime[0] = isPrime[1] = false;
+    for (ll i = 2; i * i < mxN; i++)
+    {
+        if (isPrime[i])
+        {
+            for (ll j = i * i; j < mxN; j += i)
+            {
+                isPrime[j] = false;
+            }
+        }
+    }
+}
+_______________________________________________
+SPF and LPF (Smallest/Largest Prime factor using sieve)
+
+
+vector<bool> isPrime(mxN + 1, true);
+vector<bool> spf(mxN + 1, true);
+vector<bool> lpf(mxN + 1, true);
+void sieve()
+{
+    isPrime[0] = isPrime[1] = false;
+    for (ll i = 2; i< mxN; i++)
+    {
+        if (isPrime[i])
+        {
+            spf[i]=lpf[i] = i;
+            for (ll j = 2 * i; j < mxN; j += i)
+            {
+                isPrime[j] = false;
+                lpf[j] = i; 
+                if(spf[j]==0) 
+                    spf[j] = i;
+            }
+        }
+    }
+}
+---------------------
+Prime Factorization in Logn using sieve(above function)
+used lpf[] but also we can use spf;
+
+vector<int> primefactor(int n) {
+    vector<int> pfactor;
+
+    while(n> 1) {
+        int pfac = lpf[n];
+        while(n%pfac != 0) {
+            n /= pfac;
+            pfactor.push_back(pfac);
+        }
+    }
+
+    return pfactor;
+}
+
+-------------------------------------------------------------
+Prime Factorization: (sqrt(n))
+
+void primefact(ll n)
+{
+    vector<ll> pfactor;
+    while (n % 2 == 0)
+    {
+        pfactor.push_back(2);
+        n /= 2;
+    }
+    for (ll i = 3; i * i <= n; i += 2)
+    {
+        while (n % i == 0)
+        {
+            pfactor.push_back(i);
+            n /= i;
+        }
+    }
+    if (n > 1)
+    {
+        pfactor.push_back(n);
+    }
+}
+---------------------------------------------------
+
+bool isPrime(ll n)
+{
+    if (n <= 1)
+        return 0;
+    if (n == 2 || n == 3)
+        return 1;
+    if (n % 2 == 0 || n % 3 == 0)
+        return 0;
+    for (ll i = 3; i * i <= n; i += 3)
+    {
+        if (n % i == 0)
+            return 0;
+    }
+    return 1;
+}
+------------------------------------------------------
+Diviser / factor
+
+vector<ll> diviser(ll n)
+{
+    vector<ll> a;
+    for (ll i = 1; i * i <= n; i++)
+    {
+        if (n % i == 0)
+        {
+            a.push_back(i);
+            if (i != n / i)
+                a.push_back(n / i);
+        }
+    }
+    return a;
+}
+-------------------------------------------------------------
+Binary Exponentiation: find power in Log(N)
+
+ll expo(ll n, ll pow)
+{
+    ll res = 1;
+    while (pow > 0)
+    {
+        if (pow & 1)
+        {
+            res = res * n;
+        }
+        n *= n;
+        pow >>= 1;
+    }
+    return res;
+}
+
+...with Mod:
+
+ll expoMod(ll n, ll pow, ll m = mod)
+{
+    n %= m;
+    ll res = 1;
+    while (pow > 0)
+    {
+        if (pow & 1)
+        {
+            res = res * n % m;
+        }
+        n = n * n % m;
+        pow >>= 1;
+    }
+    return res;
+}
+---------------------------------------------
+ncr:
+
+vector<ll> fact;
+ll expoMod(ll n, ll pow, ll m = mod)
+{
+    n %= m;
+    ll res = 1;
+    while (pow > 0)
+    {
+        if (pow & 1)
+        {
+            res = res * n % m;
+        }
+        n = n * n % m;
+        pow >>= 1;
+    }
+    return res;
+}
+ll ncr(ll n, ll r, ll mx = mxN)
+{
+    if (sz(fact) == 0)
+    {
+        fact.resize(mx + 10);
+        fact[0] = 1;
+        for (int i = 1; i <= mx; i++)
+        {
+            fact[i] = (fact[i - 1] * i) % mod;
+        }
+    }
+    // inverse(x) => expoMod(x, mod-2) mod is prime
+    return fact[n] * expoMod(modMul(fact[r], fact[n - r]), mod - 2) % mod;
+}
+--------------------------------------------
+MOD:
+
+ll modMul(ll a, ll b) { return ((((a % mod) * (b % mod)) % mod) + mod) % mod; }
+ll modSub(ll a, ll b) { return ((((a % mod) - (b % mod)) % mod) + mod) % mod; }
+ll modAdd(ll a, ll b) { return ((((a % mod) + (b % mod)) % mod) + mod) % mod; }
+----------------------------------------------------------
+dsu:
+
+class DSU
+{
+public:
+    vector<int> par, sz;
+    int cc;
+    DSU(int n)
+    {
+        cc = n;
+        par.assign(n, 0);
+        sz.assign(n, 1);
+        for (int i = 0; i < n; i++)
+        {
+            par[i] = i;
+        }
+    }
+    int parent(int v)
+    {
+        if (v == par[v])
+            return v;
+        return par[v] = parent(par[v]);
+        // path compression
+    }
+    void merge(int a, int b)
+    {
+        a = parent(a);
+        b = parent(b);
+        if (a != b)
+        {
+            if (sz[a] < sz[b])
+                swap(a, b);
+            par[b] = a;
+            sz[a] += sz[b];
+            cc--;
+        }
+    }
+    int size(int v)
+    {
+        return sz[parent(v)];
+    }
+    bool connected(int a, int b)
+    {
+        return parent(a) == parent(b);
+    }
+};
+
+
+make Array:
+vector<DSU> dsu(104, DSU(n));
+------------------------------------------------------
+Trie: New
+
+struct Node
+{
+    vector<int> next;
+    bool leaf = false;
+    int occ = 0;
+    Node()
+    {
+        next.assign(26, -1); // maybe change
+    }
+};
+class Trie
+{
+public:
+    vector<Node> tr;
+    char rm = '0'; // maybe change
+
+    Trie()
+    {
+        tr.emplace_back();
+    }
+    void insert(string s)
+    {
+        int cur = 0;
+        for (int i = 0; i < s.size(); ++i)
+        {
+            char c = s[i] - rm;
+            if (tr[cur].next[c] == -1)
+            {
+                tr[cur].next[c] = tr.size();
+                tr.emplace_back();
+            }
+            cur = tr[cur].next[c];
+            tr[cur].occ++;
+        }
+        tr[cur].leaf = true;
+    }
+    bool search(string s)
+    {
+        int cur = 0;
+        for (int i = 0; i < s.size(); ++i)
+        {
+            int c = s[i] - rm;
+            if (tr[cur].next[c] == -1)
+            {
+                return false;
+            }
+            cur = tr[cur].next[c];
+        }
+        return tr[cur].leaf;
+    }
+    int comPrefix(string s)
+    {
+        int cur = 0;
+        for (int i = 0; i < s.size(); ++i)
+        {
+            int c = s[i] - rm;
+            if (tr[cur].next[c] == -1)
+            {
+                return 0;
+            }
+            cur = tr[cur].next[c];
+        }
+        return tr[cur].occ;
+    }
+    int query1(int e)
+    {
+        string s = bitset<18>(e).to_string();
+        int mx = 0;
+        int cur = 0;
+        int pow = (1 << 17);
+        for (int i = 0; i < sz(s); i++)
+        {
+            int c = ((s[i] - rm) ^ 1);
+            if (tr[cur].next[c] != -1)
+            {
+                mx += pow;
+                cur = tr[cur].next[c];
+            }
+            else
+            {
+                cur = tr[cur].next[c ^ 1];
+            }
+            pow /= 2;
+        }
+        return mx;
+    }
+    int query2(int e)
+    {
+        string s = bitset<18>(e).to_string();
+        int mn = 0;
+        int cur = 0;
+        int pow = (1 << 17);
+        for (int i = 0; i < sz(s); i++)
+        {
+            int c = (s[i] - rm);
+            if (tr[cur].next[c] != -1)
+            {
+                cur = tr[cur].next[c];
+            }
+            else
+            {
+                mn += pow;
+                cur = tr[cur].next[c ^ 1];
+            }
+            pow /= 2;
+        }
+        return mn;
+    }
+};
+----------------------------------------------------------
+Trie old one:
+
+class Trie
+{
+public:
+    vector<vector<int>> v;
+    vector<bool> e;
+    vector<int> occ;
+    char rm = 'a';
+    Trie()
+    {
+        v.resize(1);
+        v[0].resize(26, -1);
+        e.push_back(0);
+        occ.push_back(0);
+    }
+    void insert(string &s)
+    {
+        int cur = 0;
+        for (int i = 0; i < s.size(); ++i)
+        {
+            char c = s[i] - rm;
+            if (v[cur][c] == -1)
+            {
+                v[cur][c] = v.size();
+                v.push_back(vector<int>(26, -1));
+                e.push_back(false);
+                occ.push_back(0);
+            }
+            cur = v[cur][c];
+            occ[cur]++;
+        }
+        e[cur] = true;
+    }
+    bool search(string &s)
+    {
+        int cur = 0;
+        for (int i = 0; i < s.size(); ++i)
+        {
+            char c = s[i] - rm;
+            if (v[cur][c] == -1)
+            {
+                return false;
+            }
+            cur = v[cur][c];
+        }
+        return e[cur];
+    }
+    int comPrefix(string &s)
+    {
+        int cur = 0;
+        for (int i = 0; i < s.size(); ++i)
+        {
+            char c = s[i] - rm;
+            if (v[cur][c] == -1)
+            {
+                return 0;
+            }
+            cur = v[cur][c];
+        }
+        return occ[cur];
+    }
+    void remove(string &s)
+    {
+        int cur = 0, last = 0;
+        for (int i = 0; i < s.size(); ++i)
+        {
+            char c = s[i] - rm;
+            if (v[cur][c] == -1)
+            {
+                return;
+            }
+            last = cur;
+            cur = v[cur][c];
+            if (occ[cur] == 1)
+            {
+                if (last)
+                    v[last][c] = -1;
+            }
+            occ[cur]--; //remove occurance
+        }
+        e[cur] = false;
+    }
+    void dfs(int cur, string &s)
+    {
+        if (e[cur])
+            cout << s << " ";
+        for (int i = 0; i < 26; ++i)
+        {
+
+            if (v[cur][i] != -1)
+            {
+                s.push_back((char)(rm + i));
+                dfs(v[cur][i], s);
+                s.pop_back();
+            }
+        }
+    }
+    void print()
+    {
+        string temp;
+        dfs(0, temp);
+    }
+};
+-----------------------------------------------------------
+dijkstra (shortest path):
+
+vector<int> dis;
+vector<int> p;
+void dijkstra(int s)
+{
+    int n = g.size();
+    dis.assign(n + 1, 1e9);
+    p.assign(n + 1, -1); // to restore path
+
+    dis[s] = 0;
+    using pii = pair<int, int>;
+    priority_queue<pii, vector<pii>, greater<pii>> q;
+    q.push({0, s});
+    while (!q.empty())
+    {
+        int v = q.top().second;
+        int d_v = q.top().first;
+        q.pop();
+        if (d_v != dis[v])
+            continue;
+
+        for (auto &edge : g[v])
+        {
+            int to = edge.first;
+            int len = edge.second;
+
+            if (dis[v] + len < dis[to])
+            {
+                dis[to] = dis[v] + len;
+                p[to] = v;
+                q.push({dis[to], to});
+            }
+        }
+    }
+}
+----------------------------------------------------------
+Rabin Karp Algo:
+
+class RabinKarp
+{
+public:
+    const long long p = 31;
+    const long long m = 1e9 + 9;
+    int patsz, textsz;
+    long long patHash = 0;
+    vector<long long> pw;
+    vector<long long> hash;
+
+    RabinKarp() {}
+    RabinKarp(string &text)
+    {
+        computeHashOfText(text);
+    }
+    RabinKarp(string &text, string &pat)
+    {
+        computeHashOfText(text);
+        computeHashOfPattern(pat);
+    }
+    void computeHashOfText(string &text)
+    {
+        textsz = text.size();
+        pw.resize(max(patsz, textsz));
+        hash.resize(textsz, 0);
+
+        //precalculate power
+        pw[0] = 1;
+        for (int i = 1; i < (int)pw.size(); i++)
+            pw[i] = (pw[i - 1] * p) % m;
+
+        //calculate Hash of Text
+        hash[0] = ((text[0] - 'a' + 1) * pw[0]) % m;
+        for (int i = 1; i < textsz; i++)
+            hash[i] = (hash[i - 1] + (text[i] - 'a' + 1) * pw[i]) % m;
+    }
+    void computeHashOfPattern(string &pat)
+    {
+        patsz = pat.size();
+        patHash = 0; //Store Hash of pattern
+        for (int i = 0; i < patsz; i++)
+            patHash = (patHash + (pat[i] - 'a' + 1) * pw[i]) % m;
+    }
+    void rollHash(string &text, int plen)
+    {
+        ll rhash = 0, rpow = 1;
+        for (int i = plen - 1; i >= 0; i--)
+        {
+            rhash = (rhash + ((text[i] - 'a' + 1) * rpow)) % m;
+            if (i > 0)
+                rpow = (rpow * p) % m;
+        }
+        for (int i = plen; i < sz(text); i++)
+        {
+            rhash = ((rhash - ((text[i - plen] - 'a' + 1) * rpow)) + m) % m;
+            rhash = (rhash * p) % m;
+            rhash = (rhash + (text[i] - 'a' + 1)) % m;
+        }
+    }
+    bool check(int l1, int r1, int l2, int r2)
+    {
+        return (gethash(l1, r1) * pw[l2 - l1] % m) == gethash(l2, r2);
+    }
+    long long gethash(int l, int r)
+    {
+        long long hashVal = hash[r];
+        if (l > 0)
+            hashVal = hashVal - hash[l - 1];
+        return (hashVal + m) % m;
+    }
+    vector<int> getallacc()
+    {
+        vector<int> occ;
+        int spos = 0, epos = patsz - 1;
+        for (; epos < textsz; epos++)
+        {
+            long long cur_h = gethash(spos, epos);
+            if (cur_h == patHash * pw[spos] % m)
+                occ.push_back(spos);
+            spos++;
+        }
+        return occ;
+    }
+};
+
+---------------------------------------------------------
+LCA: Binary Lifting
+// https://codeforces.com/contest/1328/submission/127263582
+
+{
+    
+    void dfs(int v, int p, int level)
+    {
+        par[v][0] = p;
+        lvl[v] = level;
+        for (int i = 1; i < maxpow; i++)
+        {
+            par[v][i] = par[par[v][i - 1]][i - 1];
+        }
+        for (auto &&i : g[v])
+        {
+            if (i != p)
+                dfs(i, v, level + 1);
+        }
+    }
+    int getKthpar(int v, int k)
+    {
+        int cnt = 0;
+        while (k > 0)
+        {
+            if (k & 1)
+                v = par[v][cnt];
+            cnt++;
+            k = (k >> 1);
+        }
+        return v;
+    }
+    int getLca(int u, int v)
+    {
+        //make both equal level
+        if (lvl[v] > lvl[u])
+            swap(u, v);
+        int k = lvl[u] - lvl[v];
+        u = getKthpar(u, k);
+        if (u == v)
+            return u;
+    
+        //keep jumping til not equal
+        for (int i = maxpow - 1; i >= 0; i--)
+        {
+            if (par[u][i] != par[v][i])
+            {
+                u = par[u][i];
+                v = par[v][i];
+            }
+        }
+        // 1st par of u is LCA
+        return par[u][0];
+    }
+    void initLca(int n)
+    {
+        maxpow = log2(n) + 1;
+        par.assign(n + 1, vector<int>(maxpow));
+        lvl.assign(n + 1, 0);
+        dfs(1, 0, 1);
+    
+        // vector<vector<int>> par;
+        // vector<int> lvl;
+        // int maxpow = 0;
+    }
+};
+--------------------------------------------------------
+Coordinate compression:
+
+step1: sort input array | make a set.
+
+why sorted: to maintain order like the small val has small id
+            and large has large id.
+
+step2: 
+    int id = 0;
+    for (auto &&i : stt | sorted input)
+    {
+        mp[i] = id++;
+    } 
+    
+step3:
+for (int i = 0; i < n; i++)
+    {
+        newArray[i] = mp[a[i]];
+    }
+
+-----------------------------------------------------------
+Ordered Set: (pbds)
+
+  s.order_of_key(2);  // the number of elements in the s less than 2
+ *s.find_by_order(0); // print the 0-th smallest number in s(0-based)
+--------------------------------------------------------------
+Other STL function:
+
+
+__builtin_popcount(); //return count of set bit of that number
+__builtin_popcountll(27); //for ll
+
+
+custom comparator for PQ:
+
+struct comp {
+    bool operator()(int const& p1, int const& p2)
+    {
+        return p1.height < p2.height;
+    }
+};
+
+
+Lambda;
+sort(v.begin(),v.end(),[](int &a,int &b){return a>b;});
+
+Binary Search condition-
+ mid = low + (high - low) / 2;
+
+ while (low <= high)
+    {
+        mid = (high + low) / 2;
+        if (check(a, mid))
+        {
+            ans = mid;
+            low = mid + 1;
+        }
+        else
+            high = mid - 1;
+    }
+
+-----------------------------------------------
+UsaCO:
+
+void setIO(string s) { // the argument is the filename without the extension
+	freopen((s+".in").c_str(),"r",stdin);
+	freopen((s+".out").c_str(),"w",stdout);
+}
+
+int main(){
+    setIO("problemname");
+}
+-------------------------------------------------
+Segment Tree:
+
+for mutiple value we can make node
+struct node {
+    ll v,u.;
+};
+and make vector<node> tree;
+
+class Segtree
+{
+    ///root node is 1
+    // chnage Init(), build(), update(),merge() and RangeFun() as per requirment;
+public:
+    ll size;
+    ll mx = INT_MAX;
+    ll mn = INT_MAX;
+    vector<ll> tree;
+
+    Segtree(ll n)
+    {
+        init(n);
+    }
+    Segtree(ll n, vector<int> &a)
+    {
+        init(n);
+        build(a, 1, 0, n - 1);
+    }
+    void init(ll n)
+    {
+        size = n;
+        tree.assign(4 * size, 0); //?//
+    }
+    void build(vector<int> &a, ll v, ll tl, ll tr)
+    {
+        if (tl == tr)
+        {
+            tree[v] = a[tl];
+        }
+        else
+        {
+            ll tm = (tl + tr) / 2;
+            build(a, v * 2, tl, tm);
+            build(a, v * 2 + 1, tm + 1, tr);
+            tree[v] = merge(tree[v * 2], tree[v * 2 + 1]);
+        }
+    }
+    ll query(ll l, ll r)
+    {
+        return query(1, 0, size - 1, l, r);
+    }
+    void pointUpdate(ll pos, ll val)
+    {
+        pointUpdate(1, 0, size - 1, pos, val);
+    }
+
+private:
+    ll merge(ll val1, ll val2)
+    {
+        return (val1 + val2);
+    }
+    ll query(ll v, ll tl, ll tr, ll l, ll r)
+    {
+        //no overlap
+        if (tl > r || tr < l)
+            return 0; //?//
+
+        //fully within
+        if (l <= tl && tr <= r)
+        {
+            return tree[v];
+        }
+        //partial
+        ll tm = (tl + tr) / 2;
+        ll left = query(v * 2, tl, tm, l, r);
+        ll right = query(v * 2 + 1, tm + 1, tr, l, r);
+        return merge(left, right);
+    }
+    void pointUpdate(ll v, ll tl, ll tr, ll pos, ll val)
+    {
+        if (tl == tr)
+        {
+            tree[v] = val;
+        }
+        else
+        {
+            ll tm = (tl + tr) / 2;
+            if (pos <= tm)
+                pointUpdate(v * 2, tl, tm, pos, val);
+            else
+                pointUpdate(v * 2 + 1, tm + 1, tr, pos, val);
+            tree[v] = merge(tree[v * 2], tree[v * 2 + 1]);
+        }
+    }
+};
+
+
+---------------------------------------------------------------------
+LIS:
+this will give strictly LIS:
+
+int lis(vector<int> &a)
+{
+    int n = sz(a);
+    vector<int> d;
+    d.push_back(a[0]);
+    for (int i = 1; i < n; i++)
+    {
+        auto it = upper_bound(all(d), a[i]);
+        if (it == d.end())
+        {
+            if (d.back() < a[i])
+                d.push_back(a[i]);
+        }
+        else
+        {
+            *it = a[i];
+        }
+    }
+    return d.size();
+}
+
+------------------------------------------------------------------

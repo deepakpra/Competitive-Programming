@@ -1,0 +1,41 @@
+ build.sh https://pastebin.com/xhw4rLfn
+ - Format: build.sh A
+ - Compiles A.cpp into output file A
+ 
+ -ex: build.sh Sol && build.sh brute && build.sh gen
+
+- stress.sh https://pastebin.com/MkfwM3S9
+ - Format: stress.sh solutionA solutionB generator numTests
+ - Runs solutionA and solutionB against test cases output by generator 
+   and outputs a test on which they give different results
+
+-ex: stress.sh sol brute gen 10
+   
+- validate.sh https://pastebin.com/zuRze3aW
+ - Format: validate.sh solution validator generator numTests
+ - Runs solution against test cases output by generator, then feeds 
+   the test cases followed by the output into validator.  
+   Returns a test case on which the validator does not output "OK".
+
+-----------------------------------------------------------------
+Windows: stress.bat
+
+You have to prepare 3 other programs along with this script. 
+Those are, your original solution (sol.cpp), 
+the bruteforce/correct solution (brute.cpp), 
+and the randomized input generator (gen.cpp).
+
+Have them all in the same directory.
+
+
+Do one of the following depending on your needs:
+
+Compile the 3 programs and stress test the solution on 100 randomized test cases:
+ stress
+
+Compile the 3 programs and stress test the solution on n randomized test cases:
+ stress [n]
+ ex: stress 10
+ 
+Stress test the solution on n randomized test cases without compiling the 3 programs:
+ stress [n] 0
