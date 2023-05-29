@@ -1,1 +1,1 @@
-## My CP Competitive Programming template
+## My Competitive Programming template
